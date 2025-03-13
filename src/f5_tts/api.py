@@ -64,7 +64,7 @@ class F5TTS:
 
         repo_name, ckpt_step, ckpt_type = "F5-TTS", 1250000, "safetensors"
 
-        # override for previous models
+        # override for previous models -- F5TTS_v1_Base 好像还没正常实装，先用 F5TTS_Base。
         if model == "F5TTS_Base":
             if self.mel_spec_type == "vocos":
                 ckpt_step = 1200000
@@ -116,8 +116,10 @@ class F5TTS:
         file_spec=None,
         seed=None,
     ):
-        if seed is None:
+        if seed is None or seed == -1:
             self.seed = random.randint(0, sys.maxsize)
+        else:
+            self.seed = seed
         seed_everything(self.seed)
 
         ref_file, ref_text = preprocess_ref_audio_text(ref_file, ref_text, device=self.device)
